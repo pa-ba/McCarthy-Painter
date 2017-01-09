@@ -11,7 +11,7 @@ Definition Mem := adr -> nat.
 
 Definition get r (m : Mem) := m r.
 Definition set r v (m : Mem) r' :=
-  if Nat.eqb r' r then v else m r'.
+  if beq_nat r' r then v else m r'.
 
 
 Definition empty : Mem := fun _ => 0.
@@ -25,14 +25,14 @@ Definition freeFrom : adr -> Mem -> Prop :=
 Lemma freeFrom_free : forall (r : adr) (m : Mem) (n : nat), freeFrom r m -> free r (set r n m) = m.
 Proof.
   intros. unfold free, freeFrom, set in *. apply functional_extensionality. intros.
-  remember (Nat.eqb x r) as b. destruct b.
+  remember (beq_nat x r) as b. destruct b.
   - symmetry in Heqb. apply beq_nat_true in Heqb. subst. erewrite H;auto.
   - reflexivity.
 Qed. 
 
 Lemma freeFrom_set : forall (r : adr) (m : Mem) (n : nat), freeFrom r m  ->  freeFrom (next r) (set r n m).
 Proof.
-  unfold freeFrom, set, next. intros.  remember (Nat.eqb r' r) as b. destruct b;symmetry in Heqb.
+  unfold freeFrom, set, next. intros.  remember (beq_nat r' r) as b. destruct b;symmetry in Heqb.
   - apply beq_nat_true in Heqb. omega.
   - apply beq_nat_false in Heqb. apply H. omega.
 Qed. 
