@@ -1,4 +1,4 @@
-# Compiling a Fifty Year Journey
+# Compiling a Fifty Year Journey [![Build Status](https://travis-ci.org/pa-ba/McCarthy-Painter.svg?branch=master)](https://travis-ci.org/pa-ba/McCarthy-Painter)
 
 This repository contains the supplementary material for the paper
 ["Compiling a Fifty Year Journey"](docs/paper.pdf)
