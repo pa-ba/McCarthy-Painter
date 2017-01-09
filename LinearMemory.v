@@ -1,7 +1,6 @@
 Require Import Memory.
 Require Import ZArith.
 Require Import FunctionalExtensionality.
-Require Import Nat.
 Module LinearMemory <: Memory.
 Definition adr := nat.
 Definition first := 0.
@@ -12,7 +11,7 @@ Definition Mem := adr -> nat.
 
 Definition get r (m : Mem) := m r.
 Definition set r v (m : Mem) r' :=
-  if eqb r' r then v else m r'.
+  if Nat.eqb r' r then v else m r'.
 
 
 Definition empty : Mem := fun _ => 0.
@@ -26,14 +25,14 @@ Definition freeFrom : adr -> Mem -> Prop :=
 Lemma freeFrom_free : forall (r : adr) (m : Mem) (n : nat), freeFrom r m -> free r (set r n m) = m.
 Proof.
   intros. unfold free, freeFrom, set in *. apply functional_extensionality. intros.
-  remember (eqb x r) as b. destruct b.
+  remember (Nat.eqb x r) as b. destruct b.
   - symmetry in Heqb. apply beq_nat_true in Heqb. subst. erewrite H;auto.
   - reflexivity.
 Qed. 
 
 Lemma freeFrom_set : forall (r : adr) (m : Mem) (n : nat), freeFrom r m  ->  freeFrom (next r) (set r n m).
 Proof.
-  unfold freeFrom, set, next. intros.  remember (eqb r' r) as b. destruct b;symmetry in Heqb.
+  unfold freeFrom, set, next. intros.  remember (Nat.eqb r' r) as b. destruct b;symmetry in Heqb.
   - apply beq_nat_true in Heqb. omega.
   - apply beq_nat_false in Heqb. apply H. omega.
 Qed. 
