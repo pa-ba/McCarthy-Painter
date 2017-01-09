@@ -40,7 +40,7 @@ Definition comp (x : Expr) : Code := comp' x first HALT.
 Definition Memory : Type := Mem.
 Definition Acc : Type := nat.
 
-Definition Conf : Type := Code * Memory * Acc.
+Definition Conf : Type := (Code * Memory * Acc)%type.
 
 Reserved Notation "x ==> y" (at level 80, no associativity).
 Inductive VM : Conf -> Conf -> Prop :=
