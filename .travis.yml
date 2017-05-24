@@ -4,3 +4,4 @@ before_install:
     - travis_retry sudo apt-get install coq-8.4
 script:
     - make
+sudo: required
