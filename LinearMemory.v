@@ -47,3 +47,24 @@ Proof.
   unfold freeFrom, first, empty. auto.
 Qed.
 End LinearMemory.
+
+Module LinearMemoryExt <: MemoryExt.
+Include LinearMemory.
+
+Lemma get_set' : forall (r : adr) (r' : adr) (m : Mem) (n : nat),
+    r <> r' -> get r (set r' n m) = get r m.
+Proof.
+  intros.
+  unfold get, set. remember (r =? r') as b. destruct b.
+  - symmetry in Heqb. apply beq_nat_true in Heqb. contradiction.
+  - reflexivity.
+Qed.
+
+
+Lemma next_fresh : forall (r r' : adr), lta adr next r r' -> r <> r'.
+Proof.
+  intros. apply Nat.lt_neq.
+  intros. induction H; auto.
+Qed.
+
+End LinearMemoryExt.  

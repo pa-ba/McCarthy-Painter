@@ -24,6 +24,27 @@ Axiom get_set : forall (r : adr) (m : Mem) (n : nat), get r (set r n m) = n.
 Axiom freeFrom_first : freeFrom first empty.
 
 
-
-
 End Memory.
+
+
+Inductive lta T n (r : T) : T -> Prop :=
+| lea_self : lta T n r (n r)
+| lea_next r' : lta T n r r' -> lta T n r (n r').
+
+
+(* Extended memory model with additional axioms that are only used for
+compiling variables. *)
+
+Module Type MemoryExt.
+Include Memory.
+
+
+Axiom get_set' : forall (r : adr) (r' : adr) (m : Mem) (n : nat),
+    r <> r' -> get r (set r' n m) = get r m.
+                 
+Infix "<" := (lta adr next).
+Hint Constructors lta.
+
+Axiom next_fresh : forall (r r' : adr), r < r' -> r <> r'.
+
+End MemoryExt.

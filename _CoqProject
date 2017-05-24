@@ -1,4 +1,5 @@
 -R . "" Memory.v
 -R . "" LinearMemory.v
 -R . "" Tactics.v
--R . "" Arith.v 
+-R . "" Arith.v
+-R . "" Vars.v
