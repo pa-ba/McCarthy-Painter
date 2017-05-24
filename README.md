@@ -12,7 +12,9 @@ formalisations of the calculations in the paper.
 Below we list the relevant Coq files for the calculations in the
 paper:
 
- - [Arith.v](Arith.v): the calculations from the paper
+ - [Arith.v](Arith.v): the calculations from the paper (arithmetic expressions)
+ - [Vars.v](Vars.v): the calculations for the language from McCarthy &
+   Painter paper (arithmetic expressions + variables)
  - [Memory.v](Memory.v): the abstract memory model
  - [LinearMemory.v](LinearMemory.v): simple instantiation of the memory model
  - [Tactics.v](Tactics.v): tactics library
