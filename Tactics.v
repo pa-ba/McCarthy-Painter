@@ -7,8 +7,8 @@ Ltac rewr_assumption := idtac; match goal with
 
 Module Type Preorder.
 
-Parameter Conf : Type.
-Parameter VM : Conf -> Conf -> Prop.
+Parameter State : Type.
+Parameter VM : State -> State -> Prop.
 
 End Preorder.
 
@@ -18,7 +18,7 @@ Import Ord.
 Notation "x ==> y" := (VM x y) (at level 80, no associativity).
 
 Reserved Notation "x =>> y" (at level 80, no associativity).
-Inductive trc : Conf -> Conf -> Prop :=
+Inductive trc : State -> State -> Prop :=
 | trc_refl c : c =>> c
 | trc_step_trans c1 c2 c3 : c1 ==> c2 -> c2 =>> c3 -> c1 =>> c3
  where "x =>> y" := (trc x y).
@@ -85,7 +85,7 @@ Tactic Notation  (at level 2)    "<<=" "{"tactic(t) "}" constr(e) :=
   step trc trc_trans t e.
 
 Tactic Notation  (at level 2)    "=" "{"tactic(t) "}" constr(e) := 
-  step (@eq Conf) trc_eq_trans t e.
+  step (@eq State) trc_eq_trans t e.
 
 Tactic Notation  (at level 2)    "<==" "{"tactic(t) "}" constr(e) := 
   step VM trc_step_trans' t e.
@@ -99,7 +99,7 @@ Ltac step_try rel e2 :=
 
 Tactic Notation  (at level 2)    "<<=" "{?}" constr(e) := step_try trc e.
 Tactic Notation  (at level 2)    "<==" "{?}" constr(e) := step_try VM e.
-Tactic Notation  (at level 2)    "=" "{?}" constr(e) := step_try (@eq Conf) e.
+Tactic Notation  (at level 2)    "=" "{?}" constr(e) := step_try (@eq State) e.
 
 Tactic Notation  (at level 2)    "<==" "{"tactic(t1) "}?"  := 
   match goal with

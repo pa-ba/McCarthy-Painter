@@ -40,10 +40,10 @@ Definition comp (x : Expr) : Code := comp' x first HALT.
 Definition Memory : Type := Mem.
 Definition Acc : Type := nat.
 
-Definition Conf : Type := (Code * Memory * Acc)%type.
+Definition State : Type := (Code * Memory * Acc)%type.
 
 Reserved Notation "x ==> y" (at level 80, no associativity).
-Inductive VM : Conf -> Conf -> Prop :=
+Inductive VM : State -> State -> Prop :=
 | vm_load n c m a : (LOAD n c , m, a) ==> (c , m, n)
 | vm_add c r m a : (ADD r c, m, a) ==> (c, free r m, get r m + a)
 | vm_store c r m a : (STORE r c, m, a) ==> (c, set r a m, a)
@@ -54,7 +54,7 @@ where "x ==> y" := (VM x y).
 (** Boilerplate to import calculation tactics *)
 
 Module VM <: Preorder.
-Definition Conf := Conf.
+Definition State := State.
 Definition VM := VM.
 End VM.
 Module VMCalc := Calculation VM.
