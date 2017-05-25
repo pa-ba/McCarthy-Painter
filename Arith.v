@@ -63,7 +63,7 @@ Import VMCalc.
 (** Specification of the compiler *)
 
 Theorem spec x r c a m :
-  freeFrom r m ->
+  isFreeFrom r m ->
   (comp' x r c, m, a) =>> (c , m, eval x).
 
 (** Setup the induction proof *)
@@ -90,11 +90,11 @@ Proof.
 
   begin
     (c, m, eval x1 + eval x2).
-  = {rewrite freeFrom_free, get_set}
+  = {rewrite isFreeFrom_free, get_set}
     (c, free r (set r (eval x1) m), get r (set r (eval x1) m)  + eval x2).
   <== {apply vm_add}
     (ADD r c, set r (eval x1) m, eval x2).
-  <<= {apply IHx2; auto using freeFrom_set}
+  <<= {apply IHx2; auto using isFreeFrom_set}
     (comp' x2 (next r) (ADD r c), set r (eval x1) m, eval x1).
   <== {apply vm_store}
     (STORE r (comp' x2 (next r) (ADD r c)), m, eval x1).
@@ -120,7 +120,7 @@ Theorem sound x a C : (comp x, empty, a) =>>! C -> C = (HALT , empty, eval x).
 Proof.
   intros.
   pose (spec x first HALT) as H'. unfold comp in *. pose (determ_trc determ_vm) as D.
-  unfold determ in D. eapply D. apply H. split. apply H'. apply freeFrom_first. intro Contra. destruct Contra.
+  unfold determ in D. eapply D. apply H. split. apply H'. apply isFreeFrom_first. intro Contra. destruct Contra.
   inversion H0.
 Qed.
 

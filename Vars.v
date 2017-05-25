@@ -97,7 +97,7 @@ Qed.
 Theorem spec x r c a m vars e
   (Fresh : forall v, vars v < r)
   (Env : forall v, e v = get (vars v) m):
-  freeFrom r m ->
+  isFreeFrom r m ->
   (comp' x vars r c, m, a) =>> (c , m, eval e x).
 
 (** Setup the induction proof *)
@@ -124,11 +124,11 @@ Proof.
 
   begin
     (c, m, eval e x1 + eval e x2).
-  = {rewrite freeFrom_free, get_set}
+  = {rewrite isFreeFrom_free, get_set}
     (c, free r (set r (eval e x1) m), get r (set r (eval e x1) m)  + eval e x2).
   <== {apply vm_add}
     (ADD r c, set r (eval e x1) m, eval e x2).
-  <<= {apply IHx2; auto using freeFrom_set, env_fresh}
+  <<= {apply IHx2; auto using isFreeFrom_set, env_fresh}
     (comp' x2 vars (next r) (ADD r c), set r (eval e x1) m, eval e x1).
   <== {apply vm_store}
     (STORE r (comp' x2 vars (next r) (ADD r c)), m, eval e x1).
@@ -161,9 +161,9 @@ Proof.
   unfold firstFresh. destruct v; simpl; auto.
 Qed.
 
-Lemma freeFromFirst e : freeFrom firstFresh (mkMem e).
+Lemma isFreeFromFirst e : isFreeFrom firstFresh (mkMem e).
 Proof.
-  unfold mkMem. simpl. eauto using freeFrom_first, freeFrom_set.
+  unfold mkMem. simpl. eauto using isFreeFrom_first, isFreeFrom_set.
 Qed. 
 
 Theorem spec_top x a e:
@@ -172,7 +172,7 @@ Proof.
   apply spec.
   - apply mkVarsFresh.
   - apply mkMemEnv.
-  - apply freeFromFirst.
+  - apply isFreeFromFirst.
 Qed. 
 
 
