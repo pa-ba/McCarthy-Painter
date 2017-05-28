@@ -18,7 +18,42 @@ paper:
  - [Memory.v](Memory.v): the abstract memory model
  - [LinearMemory.v](LinearMemory.v): simple instantiation of the memory model
  - [Tactics.v](Tactics.v): tactics library
- 
+
+## Paper vs. Coq Proofs
+
+
+The Coq proofs proceed as the calculations in the paper. There are,
+however, two minor technical difference due to the nature of the Coq
+system.
+
+  1. In the paper the derived VMs are tail recursive, first-order
+     functions. The Coq system must be able to prove termination of
+     all recursive function definitions. Since Coq's termination
+     checker is not powerful enough to prove termination for some of
+     the VMs (VMs from sections 3.1, 4.1, 5) or the VMs are not
+     expected to terminate in general (VMs for lambda calculi / for
+     language with loops), we had to define the VMs as relations
+     instead. In particular, all VMs are defined as a small-step
+     semantics. Each tail recursive function of a VM corresponds to a
+     configuration constructor in the small-step semantics. As a
+     consequence, the calculations do not prove equations, but rather
+     instances of the relation `=>>`, which is the transitive,
+     reflexive closure of the relation `==>` that defines the VM.
+
+  2. The Coq files contain the final result of the calculation, and
+     thus do not reflect the *process* of discovering the definition
+     of the compiler and the VM. That is, the files already contain
+     the full definitions of the compiler and the virtual machine. But
+     we used the same methodology as described in the paper to
+     *develop* the Coq proofs. This is achieved by initially defining
+     the `Code` data type as an empty type, defining the `==>`
+     relation as an empty relation (i.e. with no rules), and defining
+     the compiler function using the term `Admit` (which corresponds
+     to Haskell's "undefined"). This setup then allows us to calculate
+     the definition of the `Code` data type, the VM, and the compiler
+     as described in the paper.
+
+
 ## Technical Details
 
 ### Dependencies
